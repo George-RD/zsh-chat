@@ -6,6 +6,8 @@ setopt errexit nounset pipefail
 # --- Global Constants ---
 readonly VERSION="0.1.0"
 readonly SCRIPT_NAME="${0:t}"
+readonly API_URL="${ZSH_CHAT_API_URL:-http://localhost:3000/api}"
+readonly DEFAULT_AUTHOR="${USER:-anonymous}"
 
 # --- Utility Functions ---
 log_info() {
@@ -40,18 +42,28 @@ cmd_post() {
   fi
   local message="$*"
   log_info "Attempting to post: '$message'..."
-  # Mocking API call
+
+  local json_payload
+  json_payload=$(printf '{"author":"%s", "message":"%s"}' "$DEFAULT_AUTHOR" "$message")
+
+  curl -s -X POST -H "Content-Type: application/json" -d "$json_payload" "$API_URL/posts" > /dev/null
+
   print "\e[32mSuccessfully posted!\e[0m"
 }
 
 cmd_feed() {
   log_info "Fetching latest posts..."
-  # Mocking feed output
+  local raw_feed
+  raw_feed=$(curl -s "$API_URL/posts")
+
+  if [[ -z "$raw_feed" ]]; then
+    log_error "Failed to fetch feed."
+    exit 1
+  fi
+
   print ""
   print -- "--- Community Feed ---"
-  print "@george: Just started building zsh-chat! 🚀"
-  print "@alice: The terminal is the best social media platform."
-  print "@bob: Is this thing on?"
+  print "$raw_feed" | jq -r '.[] | "@\(.author): \(.message)"'
   print -- "----------------------"
   print ""
 }
