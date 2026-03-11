@@ -12,7 +12,27 @@ zsh-chat aims to bring social interaction directly to your command line, allowin
 - [ ] Profile management via local config.
 - [ ] Plugin architecture for extensibility.
 
+## Project Structure
+- `client/`: The terminal client.
+    - `rust-client/`: The new Rust-based client (WIP).
+    - `zsh-chat.zsh`: The original Zsh-based client.
+- `server/`: A simple Node.js (Express) backend.
+- `conductor/`: Project management and track plans.
+
 ## Tech Stack
-- **Frontend**: Zsh, TUI (maybe using `ncurses` or a framework like `gum`).
-- **Backend**: To be determined (considering decentralized or a simple REST API).
-- **Automation**: GitHub Actions for CI/CD.
+- **Frontend**: Rust (Primary client), Zsh (Legacy/Helper scripts).
+- **Backend**: Node.js (Express) MVP.
+- **TUI**: `ratatui` or `crossterm` (planned for Rust).
+- **Project Tracking**: Conductor Project Framework.
+
+## Getting Started
+
+### Backend
+1. `cd server`
+2. `npm install`
+3. `npm start`
+
+### Rust Client
+1. Ensure you have Rust installed.
+2. `cd client/rust-client`
+3. `cargo run -- feed`
