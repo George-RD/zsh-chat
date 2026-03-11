@@ -5,16 +5,17 @@ A terminal-based social media platform, built for the shell.
 ## Vision
 zsh-chat aims to bring social interaction directly to your command line, allowing you to share snippets, thoughts, and connect with other developers without leaving your workflow.
 
-## Features (Planned)
-- [ ] Post updates from the terminal.
-- [ ] View a feed of other users' posts.
+## Features (Planned & Completed)
+- [x] Post updates from the terminal (Rust & Zsh).
+- [x] View a feed of other users' posts.
+- [x] Interactive TUI for feed viewing (Rust).
 - [ ] Reply and interact with posts.
 - [ ] Profile management via local config.
 - [ ] Plugin architecture for extensibility.
 
 ## Project Structure
 - `client/`: The terminal client.
-    - `rust-client/`: The new Rust-based client (WIP).
+    - `rust-client/`: The new Rust-based client (Interactive TUI).
     - `zsh-chat.zsh`: The original Zsh-based client.
 - `server/`: A simple Node.js (Express) backend.
 - `conductor/`: Project management and track plans.
