@@ -6,10 +6,12 @@ use crossterm::{
 use ratatui::{backend::CrosstermBackend, Terminal};
 use std::io;
 use std::time::Duration;
-use crate::api::ApiClient;
 use crate::ui;
+use crate::models::Post;
+use tokio_tungstenite::connect_async;
+use futures_util::StreamExt;
 
-pub async fn run_tui_feed(api_client: &ApiClient) -> Result<(), Box<dyn std::error::Error>> {
+pub async fn run_tui_feed(api_url: &str) -> Result<(), Box<dyn std::error::Error>> {
     // Setup terminal
     enable_raw_mode()?;
     let mut stdout = io::stdout();
@@ -17,31 +19,36 @@ pub async fn run_tui_feed(api_client: &ApiClient) -> Result<(), Box<dyn std::err
     let backend = CrosstermBackend::new(stdout);
     let mut terminal = Terminal::new(backend)?;
 
-    let mut posts = api_client.fetch_posts().await?;
-    let mut last_fetch = std::time::Instant::now();
+    let mut posts: Vec<Post> = Vec::new();
+
+    // Connect to WebSocket relay
+    let (ws_stream, _) = connect_async(api_url).await?;
+    let (_, mut ws_receiver) = ws_stream.split();
 
     loop {
         terminal.draw(|f| {
             ui::render_feed(f, &posts);
         })?;
 
-        if event::poll(Duration::from_millis(100))? {
+        // Check for WebSocket messages
+        tokio::select! {
+            Some(Ok(msg)) = ws_receiver.next() => {
+                if let tokio_tungstenite::tungstenite::Message::Text(text) = msg {
+                    if let Ok(post) = serde_json::from_str::<Post>(&text) {
+                        posts.push(post);
+                    }
+                }
+            }
+            _ = tokio::time::sleep(Duration::from_millis(50)) => {}
+        }
+
+        if event::poll(Duration::from_millis(50))? {
             if let Event::Key(key) = event::read()? {
                 match key.code {
                     KeyCode::Char('q') => break,
-                    KeyCode::Char('r') => {
-                        posts = api_client.fetch_posts().await?;
-                        last_fetch = std::time::Instant::now();
-                    }
                     _ => {}
                 }
             }
-        }
-
-        // Auto-refresh every 30 seconds
-        if last_fetch.elapsed() > Duration::from_secs(30) {
-            posts = api_client.fetch_posts().await?;
-            last_fetch = std::time::Instant::now();
         }
     }
 

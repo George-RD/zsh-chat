@@ -1,24 +1,31 @@
-# Product Definition: zsh-chat
+# zsh-chat: Product Definition (v2.0)
 
-## Problem Statement
-Developers often spend their entire day in the terminal. When they want to share a thought, ask for help, or see what others are working on, they have to switch context to a web browser or a separate desktop application (e.g., Twitter/X, Bluesky, Mastodon). This context switching is disruptive and breaks flow.
+## The Vision: "Lo-Fi High-Tech"
+A decentralized social protocol for the terminal that prioritizes cryptographic sovereignty, mathematical discovery, and a low-fidelity aesthetic.
 
-## Proposed Solution: zsh-chat
-A terminal-native social media platform that exists where developers live. It should be lightweight, text-centric, and highly scriptable.
+## Core Pillars
 
-### Key Objectives:
-1.  **Zero Context-Switching:** Users should be able to post and read updates directly from their `zsh` prompt or a simple command.
-2.  **Developer-Centric:** Support for syntax highlighting in snippets, easy sharing of CLI outputs, and integration with common shell tools.
-3.  **Low Friction:** Minimal setup required. Authenticate once and start chatting.
-4.  **Extensible:** A plugin-based system to allow users to build their own interactions (e.g., a "build status" feed, automated deployments sharing, etc.).
+### 1. The Fibonacci Feed (Discovery)
+Instead of a black-box algorithm, the feed is governed by the Golden Ratio ($\phi \approx 1.618$).
+- **1st Order (Direct - 61.80%):** Posts from your direct follows.
+- **2nd Order (Mutuals - 23.61%):** Prioritized by "Path Density."
+- **3rd Order (Extended - 9.02%):** Friends of friends of friends.
+- **4th Order (Distant - 3.44%):**
+- **5th Order (Trace - 1.32%):**
+- **6th Order (Fringe - 0.50%):**
+- **The "Anti-Bubble":** Remaining percentage reserved for global "New Entrants."
 
-## Target Audience
-- Zsh shell users.
-- Command-line enthusiasts.
-- Developers who prefer TUI-based tools.
+### 2. Identity & Trust
+- **Keypair Sovereignty:** Ed25519 keys generated locally. No central accounts.
+- **Proof of Work (PoW):** Every message requires a Hashcash-style PoW. This acts as a "Spam Tax."
+- **Web of Trust:** Identity verification is done by checking signatures against a local "Known Keys" database.
 
-## Core User Stories:
-- As a developer, I want to post a status update from my prompt.
-- As a developer, I want to view a real-time feed of posts in my terminal.
-- As a developer, I want to reply to a post using my favorite terminal editor.
-- As a developer, I want to share a code snippet with automatic formatting.
+### 3. Lo-Fi Aesthetics (The "Render Engine")
+- **Static Emoji Mapping:** Standard Unicode emojis are detected and replaced visually by a "4-bit ANSI Art" version baked into the binary. The raw message preserves the Unicode for copy-pasting.
+- **Dynamic Image Downsampling:** Images pasted/uploaded are dynamically downsampled to 16 ANSI colors (4-bit) or 4 ANSI colors (2-bit) using Floyd-Steinberg dithering.
+- **Soft Moderation:** Low-res rendering removes the impact of shock-content while preserving the "vibe."
+
+### 4. Decentralized Relays
+- **Dumb Relays:** WebSocket servers that store and forward signed JSON events.
+- **Incentivization:** Running a relay unlocks "Extended Capability" (e.g., local art packs, special TUI badges).
+- **Embedded Relay:** The `zsh-chat` binary includes the relay code (`zsh-chat serve`).
